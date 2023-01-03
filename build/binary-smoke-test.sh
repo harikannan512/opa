@@ -4,8 +4,10 @@ OPA_EXEC="$1"
 TARGET="$2"
 
 PATH_SEPARATOR="/"
+BASE_PATH=$(pwd)
 if [[ $OPA_EXEC == *".exe" ]]; then
     PATH_SEPARATOR="\\"
+    BASE_PATH=$(pwd -W | sed 's/^\///' | sed 's/\//\\/g')
 fi
 
 github_actions_group() {
@@ -48,4 +50,10 @@ github_actions_group assert_contains '/test/cli/smoke/test.rego' "$(tar -tf o3.t
 # Data files - correct namespaces
 echo "::group:: Data files - correct namespaces"
 assert_contains "data.namespace | test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json" "$(opa inspect test/cli/smoke)"
+echo "::endgroup::"
+
+# Data files - correct root path
+echo "::group:: Data files - correct root path"
+WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json"
+assert_contains "data.namespace | " "$(opa inspect ${BASE_PATH}/test/cli/smoke)"
 echo "::endgroup::"
