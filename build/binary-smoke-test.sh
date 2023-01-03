@@ -5,9 +5,11 @@ TARGET="$2"
 
 PATH_SEPARATOR="/"
 BASE_PATH=$(pwd)
+WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json"
 if [[ $OPA_EXEC == *".exe" ]]; then
     PATH_SEPARATOR="\\"
-    BASE_PATH=$(pwd -W | sed 's/^\///' | sed 's/\//\\/g')
+    BASE_PATH=$(pwd -W | sed 's/^\///' | sed 's/\//\\\\/g')
+    WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}${PATH_SEPARATOR}test${PATH_SEPARATOR}${PATH_SEPARATOR}cli${PATH_SEPARATOR}${PATH_SEPARATOR}smoke${PATH_SEPARATOR}${PATH_SEPARATOR}namespace${PATH_SEPARATOR}${PATH_SEPARATOR}data.json"
 fi
 
 github_actions_group() {
@@ -54,6 +56,5 @@ echo "::endgroup::"
 
 # Data files - correct root path
 echo "::group:: Data files - correct root path"
-WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json"
-assert_contains "data.namespace | ${WIN_BASE_PATH}" "$(opa inspect ${BASE_PATH}/test/cli/smoke)"
+assert_contains "${WIN_BASE_PATH}" "$(opa inspect ${BASE_PATH}/test/cli/smoke -f json)"
 echo "::endgroup::"
