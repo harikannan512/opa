@@ -55,5 +55,5 @@ echo "::endgroup::"
 # Data files - correct root path
 echo "::group:: Data files - correct root path"
 WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json"
-assert_contains "data.namespace | " "$(opa inspect ${BASE_PATH}/test/cli/smoke)"
+assert_contains "data.namespace | ${WIN_BASE_PATH}" "$(opa inspect ${BASE_PATH}/test/cli/smoke)"
 echo "::endgroup::"
