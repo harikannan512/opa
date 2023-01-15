@@ -6,7 +6,6 @@ TARGET="$2"
 PATH_SEPARATOR="/"
 BASE_PATH=$(pwd)
 TEST_PATH="${BASE_PATH}/test/cli/smoke/namespace/data.json"
-WIN_BASE_PATH="${BASE_PATH}${PATH_SEPARATOR}test${PATH_SEPARATOR}cli${PATH_SEPARATOR}smoke${PATH_SEPARATOR}namespace${PATH_SEPARATOR}data.json"
 if [[ $OPA_EXEC == *".exe" ]]; then
     PATH_SEPARATOR="\\"
     BASE_PATH=$(pwd -W)
